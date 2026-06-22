@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA // Premium Glossy Audio Console</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --glow-color-primary: rgba(168, 85, 247, 0.6);
+            --glow-color-secondary: rgba(6, 182, 212, 0.6);
+            --accent-gradient: linear-gradient(135deg, #a855f7, #06b6d4);
+            --bg-gradient: linear-gradient(135deg, #090514, #02000a, #0d0012);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-gradient);
+            overflow-x: hidden;
+            transition: background 1s ease;
+        }
+
+        .heading-font {
+            font-family: 'Syne', sans-serif;
+        }
+
+        /* Glassmorphism Styles with High Gloss */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.025);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7),
+                        inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+            position: relative;
+        }
+
+        /* Ultra glossy overlay reflections */
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+            border-top-left-radius: inherit;
+            border-top-right-radius: inherit;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .glass-panel-heavy {
+            background: rgba(8, 4, 18, 0.85);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.015);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.18);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4),
+                        0 0 20px var(--glow-color-primary);
+        }
+
+        .glass-card-active {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
+                        0 0 15px var(--glow-color-primary);
+        }
+
+        /* 3D Reflection Container for Vinyl */
+        .vinyl-container {
+            perspective: 1000px;
+        }
+
+        .vinyl-plate {
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-style: preserve-3d;
+        }
+
+        /* Vinyl Spin Animation */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .vinyl-spin {
+            animation: spin 12s linear infinite;
+        }
+
+        .vinyl-paused {
+            animation-play-state: paused;
+        }
+
+        /* Ambient Dynamic Glows */
+        .dynamic-glow-bg {
+            filter: blur(140px);
+            opacity: 0.45;
+            transition: background 1.5s ease, transform 2s ease;
+        }
+
+        /* Premium Range Slider styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            height: 6px;
+            cursor: pointer;
+            outline: none;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 8px var(--glow-color-primary);
+            border: 2px solid rgba(0, 0, 0, 0.8);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.35);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Glossy diagonal sweeping shimmer effect */
+        @keyframes shimmer {
+            0% { left: -150%; }
+            50% { left: 150%; }
+            100% { left: 150%; }
+        }
+
+        .gloss-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gloss-shimmer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 80%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.12),
+                transparent
+            );
+            transform: skewX(-25deg);
+            animation: shimmer 8s infinite linear;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 flex flex-col justify-between relative overflow-y-auto">
+
+    <!-- Premium Animated Background Ambient Blobs -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div id="ambient-blob-1" class="absolute top-[-15%] left-[-15%] w-[60%] h-[60%] rounded-full bg-purple-600 dynamic-glow-bg"></div>
+        <div id="ambient-blob-2" class="absolute bottom-[-15%] right-[-15%] w-[60%] h-[60%] rounded-full bg-cyan-600 dynamic-glow-bg"></div>
+        <div id="ambient-blob-3" class="absolute top-[35%] left-[30%] w-[45%] h-[45%] rounded-full bg-fuchsia-600 dynamic-glow-bg" style="filter: blur(160px); opacity: 0.3;"></div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="relative z-10 w-full max-w-7xl mx-auto px-6 pt-6 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-purple-500/30 gloss-shimmer border border-white/20">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+                </svg>
+            </div>
+            <div>
+                <span class="heading-font text-2xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-purple-300">AURA</span>
+                <span class="text-[10px] block text-cyan-400 font-bold tracking-widest uppercase">AUTO-SYNC CONSOLE</span>
+            </div>
+        </div>
+
+        <!-- Connection State and Helper Mode -->
+        <div class="flex items-center space-x-3">
+            <div id="sync-status-pill" class="flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/30 px-4 py-1.5 rounded-full">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span id="sync-status-text" class="text-xs font-bold text-emerald-400 uppercase tracking-wider">TRACK DIRECTORY ALIVE</span>
+            </div>
+
+            <!-- Manual Selection Override Button (In case local file scanning is blocked by CORS/security policies) -->
+            <button onclick="triggerFolderSelector()" class="bg-white/5 hover:bg-white/10 transition-all border border-white/10 text-xs px-3.5 py-1.5 rounded-full font-semibold flex items-center gap-1.5 text-slate-300 hover:text-white" title="Force Directory Upload if hosted on static hosting">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                </svg>
+                <span>Manual Sync</span>
+            </button>
+            <input type="file" id="folderSelectorInput" webkitdirectory directory multiple class="hidden" onchange="handleManualFolderSelect(event)">
+
+            <button onclick="toggleHelpModal()" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 transition-all flex items-center justify-center border border-white/10 text-slate-300" title="System Mechanics Help">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Player Workspace -->
+    <main class="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-6 py-6 flex-grow grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        
+        <!-- Left: Gloss Master Console (7 Cols) -->
+        <div class="lg:col-span-7 flex flex-col justify-between space-y-6">
+            <div class="glass-panel rounded-[32px] p-6 md:p-8 flex-grow flex flex-col justify-between overflow-hidden gloss-shimmer">
+                
+                <!-- Status/Meta Bar -->
+                <div class="flex justify-between items-center relative z-10 mb-4">
+                    <div class="flex items-center space-x-2">
+                        <span id="visualizer-theme-indicator" class="text-[10px] font-black uppercase tracking-widest text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20">
+                            NEON SPECTRUM ACTIVE
+                        </span>
+                    </div>
+                    <div class="flex items-center space-x-2.5">
+                        <!-- Sleeptimer button -->
+                        <button id="btn-timer" class="text-slate-400 hover:text-white transition-colors" title="Configure Sleep Timer" onclick="toggleTimerMenu()">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </button>
+                        <span id="timer-badge" class="hidden text-[10px] bg-cyan-500/20 text-cyan-400 font-bold px-2 py-0.5 rounded"></span>
+                        
+                        <!-- Love Button -->
+                        <button id="btn-favorite" class="text-slate-400 hover:text-rose-500 transition-colors" title="Add to Favorites" onclick="toggleFavoriteCurrent()">
+                            <svg id="favorite-heart-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Interactive 3D Vinyl & Track Detail Display -->
+                <div class="flex flex-col md:flex-row items-center gap-8 my-6 relative z-10">
+                    
+                    <!-- Vinyl deck inside a 3D perspective viewport -->
+                    <div class="vinyl-container w-48 h-48 md:w-56 md:h-56 flex-shrink-0">
+                        <div id="vinyl-deck" class="vinyl-plate w-full h-full rounded-full bg-slate-950 border-[7px] border-slate-900 shadow-3xl flex items-center justify-center relative group cursor-grab active:cursor-grabbing">
+                            <!-- Vinyl Groove Lines -->
+                            <div class="absolute inset-1.5 rounded-full border border-slate-800/80 pointer-events-none"></div>
+                            <div class="absolute inset-3 rounded-full border border-slate-800/60 pointer-events-none"></div>
+                            <div class="absolute inset-6 rounded-full border border-slate-800/40 pointer-events-none"></div>
+                            <div class="absolute inset-10 rounded-full border border-slate-800/30 pointer-events-none"></div>
+                            <div class="absolute inset-14 rounded-full border border-slate-800/20 pointer-events-none"></div>
+                            <div class="absolute inset-20 rounded-full border border-slate-800/15 pointer-events-none"></div>
+
+                            <!-- Colorful dynamic record center -->
+                            <div id="vinyl-center-label" class="w-16 h-16 rounded-full bg-gradient-to-tr from-purple-500 to-cyan-400 p-0.5 shadow-inner transition-all duration-700">
+                                <div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center border-2 border-slate-900">
+                                    <!-- Spindle pin hole -->
+                                    <div class="w-3.5 h-3.5 rounded-full bg-white/90 shadow"></div>
+                                </div>
+                            </div>
+
+                            <!-- Double Gloss Overlay reflection layer -->
+                            <div class="absolute inset-0 rounded-full pointer-events-none z-10 bg-gradient-to-tr from-white/15 via-transparent to-white/5 border border-white/10 shadow-inner"></div>
+                        </div>
+                    </div>
+
+                    <!-- Song Metadata Info & Visualizer Panel -->
+                    <div class="flex-grow text-center md:text-left w-full space-y-4">
+                        <div>
+                            <h2 id="player-title" class="heading-font text-2.5xl md:text-3xl font-extrabold tracking-tight text-white leading-tight mb-1 truncate">Loading Audio Library...</h2>
+                            <p id="player-artist" class="text-sm font-semibold text-slate-400 truncate">AURA Core Engine</p>
+                        </div>
+
+                        <!-- Equalizer Visualizer Screen with customizable themes -->
+                        <div class="bg-black/35 rounded-2xl p-3 border border-white/10 relative overflow-hidden group">
+                            <canvas id="visualizer-screen"></canvas>
+                            <!-- Visualizer Overlay Gloss Reflection -->
+                            <div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none"></div>
+                            <!-- Live visualizer cycle button -->
+                            <button onclick="cycleVisualizerTheme()" class="absolute bottom-2.5 right-2.5 bg-black/60 hover:bg-black/80 text-[10px] uppercase font-bold tracking-widest text-slate-300 px-2.5 py-1 rounded-md border border-white/10 transition-all opacity-0 group-hover:opacity-100">
+                                Change Visualizer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Scrubber / Progress Bar -->
+                <div class="space-y-2 mt-4 relative z-10">
+                    <div class="flex justify-between text-xs text-slate-400 font-mono">
+                        <span id="meta-time-current">0:00</span>
+                        <span id="meta-time-total">0:00</span>
+                    </div>
+                    <input type="range" id="master-scrubber" min="0" value="0" step="0.05" class="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-white/10 accent-purple-500 transition-all">
+                </div>
+
+                <!-- Playback Action Center -->
+                <div class="flex justify-between items-center mt-6 relative z-10">
+                    
+                    <!-- Sound Balance / Panning node -->
+                    <div class="flex flex-col space-y-1 w-1/4">
+                        <span class="text-[9px] uppercase tracking-widest font-extrabold text-slate-400 block">Balance (L/R)</span>
+                        <div class="flex items-center space-x-2">
+                            <input type="range" id="balance-slider" min="-1" max="1" step="0.1" value="0" class="w-full h-1">
+                        </div>
+                    </div>
+
+                    <!-- Master Player Triggers -->
+                    <div class="flex items-center space-x-4 md:space-x-6 justify-center">
+                        <button id="btn-shuffle-toggle" class="p-2 text-slate-400 hover:text-cyan-400 transition-all" title="Toggle Shuffle Mode" onclick="toggleShuffle()">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                            </svg>
+                        </button>
+
+                        <button id="btn-prev-track" class="p-2 text-slate-300 hover:text-white hover:scale-110 active:scale-95 transition-all" title="Previous Track" onclick="playPrevious()">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 6h2v12H6zm3.5 6L18 6v12z"/>
+                            </svg>
+                        </button>
+
+                        <!-- Centered play button with glowing accent rings -->
+                        <button id="btn-master-play" class="w-16 h-16 rounded-full bg-gradient-to-tr from-purple-600 via-fuchsia-500 to-cyan-400 text-white flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30 hover:border-white/50 relative glossy-shine group" onclick="togglePlayPause()">
+                            <!-- Shimmering overlay inside button -->
+                            <div class="absolute inset-0 rounded-full bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                            
+                            <!-- SVG Play / Pause Icons -->
+                            <svg id="play-symbol" class="w-7 h-7 translate-x-0.5 text-white filter drop-shadow" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <svg id="pause-symbol" class="w-7 h-7 text-white hidden filter drop-shadow" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </button>
+
+                        <button id="btn-next-track" class="p-2 text-slate-300 hover:text-white hover:scale-110 active:scale-95 transition-all" title="Next Track" onclick="playNext()">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 18V6l8.5 6zm9-12h2v12h-2z"/>
+                            </svg>
+                        </button>
+
+                        <button id="btn-repeat-toggle" class="p-2 text-slate-400 hover:text-purple-400 transition-all" title="Toggle Loop Mode" onclick="toggleRepeat()">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Volume Panel -->
+                    <div class="flex items-center space-x-2.5 w-1/4 justify-end">
+                        <button id="btn-volume-icon" class="text-slate-400 hover:text-white transition-colors" onclick="toggleMute()">
+                            <svg id="svg-volume" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                            </svg>
+                        </button>
+                        <input type="range" id="slider-volume" min="0" max="1" step="0.05" value="0.75" class="w-16 md:w-20 h-1">
+                    </div>
+                </div>
+
+                <!-- Advanced Web Audio Equalizer (EQ Presets) Panel -->
+                <div class="mt-6 border-t border-white/5 pt-5 relative z-10">
+                    <span class="text-[9px] uppercase tracking-widest font-extrabold text-cyan-400 block mb-3">Acoustic Presets (Real-time DSP Processing)</span>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="setEqPreset('flat', this)" class="eq-btn px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-xs text-white border border-white/10 transition-all font-medium">Flat</button>
+                        <button onclick="setEqPreset('bassboost', this)" class="eq-btn px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-slate-300 border border-white/5 transition-all font-medium">Bass Boost</button>
+                        <button onclick="setEqPreset('electronic', this)" class="eq-btn px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-slate-300 border border-white/5 transition-all font-medium">Electronic</button>
+                        <button onclick="setEqPreset('vocals', this)" class="eq-btn px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-slate-300 border border-white/5 transition-all font-medium">Vocal Booster</button>
+                        <button onclick="setEqPreset('ambient', this)" class="eq-btn px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-slate-300 border border-white/5 transition-all font-medium">Spacious Ambient</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Right: Intelligent Queue & System Settings (5 Cols) -->
+        <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
+            
+            <!-- Dynamic Playlist Console -->
+            <div class="glass-panel rounded-[32px] p-6 flex flex-col h-full justify-between overflow-hidden">
+                <div class="space-y-4">
+                    <!-- Title/Stats -->
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="heading-font text-lg font-bold text-white tracking-wide">Audio Queue</h3>
+                            <p id="queue-status-text" class="text-xs text-slate-400">Loading directory list...</p>
+                        </div>
+                        <span id="player-mode-badge" class="text-[10px] uppercase font-black tracking-widest text-emerald-400 border border-emerald-400/30 px-3 py-1 rounded bg-emerald-500/5">
+                            AUTO-SYNCED
+                        </span>
+                    </div>
+
+                    <!-- Modern Search Interface -->
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </span>
+                        <input type="text" id="queue-search" placeholder="Search track title, artist, source..." class="w-full bg-white/5 border border-white/10 rounded-2xl py-2.5 pl-10 pr-4 text-sm text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all">
+                    </div>
+                </div>
+
+                <!-- Dynamic Playlist Container -->
+                <div id="playlist-scroller" class="flex-grow overflow-y-auto max-h-[280px] lg:max-h-[310px] mt-4 pr-1 space-y-2.5">
+                    <!-- Dynamically Rendered Track Items -->
+                </div>
+
+                <!-- Theme / Ambient Controls (Advanced Feature) -->
+                <div class="mt-4 border-t border-white/5 pt-4 space-y-3">
+                    <span class="text-[9px] uppercase tracking-widest font-extrabold text-slate-400 block">Personalize Console Skin</span>
+                    <div class="grid grid-cols-4 gap-2">
+                        <button onclick="applyTheme('cyberpunk')" class="px-2 py-1.5 rounded-lg text-[10px] uppercase font-bold text-slate-200 border border-white/10 bg-gradient-to-r from-purple-900/40 to-cyan-900/40 hover:from-purple-900/60 hover:to-cyan-900/60 transition-all">Cyberpunk</button>
+                        <button onclick="applyTheme('liquidgold')" class="px-2 py-1.5 rounded-lg text-[10px] uppercase font-bold text-slate-200 border border-white/10 bg-gradient-to-r from-amber-900/40 to-orange-900/40 hover:from-amber-900/60 hover:to-orange-900/60 transition-all">Gold</button>
+                        <button onclick="applyTheme('emerald')" class="px-2 py-1.5 rounded-lg text-[10px] uppercase font-bold text-slate-200 border border-white/10 bg-gradient-to-r from-emerald-900/40 to-teal-900/40 hover:from-emerald-900/60 hover:to-teal-900/60 transition-all">Emerald</button>
+                        <button onclick="applyTheme('crimson')" class="px-2 py-1.5 rounded-lg text-[10px] uppercase font-bold text-slate-200 border border-white/10 bg-gradient-to-r from-rose-900/40 to-pink-900/40 hover:from-rose-900/60 hover:to-pink-900/60 transition-all">Crimson</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Floating Speed & Timer Menu Controls (Hidden Menu popup) -->
+    <div id="timer-config-menu" class="fixed bottom-24 right-6 z-50 glass-panel-heavy rounded-2xl p-5 border border-white/15 shadow-2xl max-w-xs w-full opacity-0 pointer-events-none translate-y-10 transition-all duration-300">
+        <div class="flex justify-between items-center mb-4">
+            <h4 class="heading-font text-xs font-bold text-white uppercase tracking-wider">Configure sleep timer</h4>
+            <button onclick="toggleTimerMenu()" class="text-slate-400 hover:text-white">&times;</button>
+        </div>
+        <div class="grid grid-cols-2 gap-2 mb-3">
+            <button onclick="setSleepTimer(5)" class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300">5 Mins</button>
+            <button onclick="setSleepTimer(15)" class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300">15 Mins</button>
+            <button onclick="setSleepTimer(30)" class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300">30 Mins</button>
+            <button onclick="setSleepTimer(60)" class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300">60 Mins</button>
+        </div>
+        <button onclick="clearSleepTimer()" class="w-full py-1.5 rounded-xl border border-rose-500/30 text-rose-400 hover:bg-rose-500/10 text-xs font-semibold transition-all">Clear Timer</button>
+    </div>
+
+    <!-- System Status / Notification Toast -->
+    <div id="status-toast" class="fixed bottom-6 right-6 z-50 glass-panel-heavy rounded-2xl px-5 py-3.5 border border-white/15 flex items-center space-x-3 shadow-2xl opacity-0 translate-y-10 pointer-events-none transition-all duration-500">
+        <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-300">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+        </div>
+        <div>
+            <p id="toast-title-text" class="text-xs font-black uppercase tracking-wider text-purple-300">AURA CORE FEEDBACK</p>
+            <p id="toast-desc-text" class="text-xs text-slate-300 font-medium">Automatic synchronization completed.</p>
+        </div>
+    </div>
+
+    <!-- Interactive Help Modal -->
+    <div id="system-help-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-panel-heavy rounded-3xl max-w-lg w-full p-6 md:p-8 space-y-5 relative overflow-hidden shadow-2xl">
+            <div class="flex justify-between items-start">
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-cyan-400"></span>
+                    <h3 class="heading-font text-xl font-bold text-white">Advanced Auto-Scan System</h3>
+                </div>
+                <button onclick="toggleHelpModal()" class="text-slate-400 hover:text-white transition-colors">&times;</button>
+            </div>
+
+            <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                <p>
+                    This console is configured to **automatically sync** tracks from your local folders on page load:
+                </p>
+                <div class="space-y-2 bg-black/40 p-4 rounded-2xl border border-white/10 text-xs">
+                    <p><strong class="text-cyan-400">1. Server Auto-Scanning:</strong> If hosted locally via Live Server or on any web server, AURA automatically scans the <code class="text-purple-400">Track/</code> folder using background HTML index parser. Any MP3s or WAV files added there will load natively without changes!</p>
+                    <p class="mt-2"><strong class="text-cyan-400">2. Predefined Config:</strong> To support running directly via <code class="text-purple-400">file://</code> protocol, you can list your file names inside the <code class="text-purple-400">CONFIG_TRACKS</code> array at the top of the Javascript code.</p>
+                    <p class="mt-2"><strong class="text-cyan-400">3. Manual Sync Fallback:</strong> If security constraints prevent automated scanning, click <strong class="text-white">"Manual Sync"</strong>, point to your local <strong class="text-cyan-400">Track</strong> folder, and it will sync immediately.</p>
+                </div>
+                <p class="text-xs text-slate-400 italic">
+                    All graphics utilize high-end hardware acceleration, dynamic panners, and custom Web Audio filter chains for studio quality sound.
+                </p>
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button onclick="toggleHelpModal()" class="px-5 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-bold border border-white/10 transition-all">
+                    Acknowledge
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Native Background Audio Engine -->
+    <audio id="audio-core" class="hidden" crossorigin="anonymous"></audio>
+
+    <footer class="relative z-10 w-full max-w-7xl mx-auto px-6 py-6 text-center text-[10px] text-slate-600 border-t border-white/5 mt-6">
+        <p>&copy; 2026 AURA Music Player. Engineered with automated local server synchronization.</p>
+    </footer>
+
+    <!-- Javascript Layer -->
+    <script>
+        /**
+         * ======================================================================
+         * DEVELOPER TRACK CONFIGURATION:
+         * Add your filenames here! Whenever you add a new song to your local 
+         * 'Track' folder, simply list its filename here. Aura will auto-scan it
+         * and resolve it dynamically if browser security limits background folder reads!
+         * ======================================================================
+         */
+        const CONFIG_TRACKS = [
+            "song1.mp3",
+            "song2.wav",
+            "chill-mix.mp3",
+            "lofi-beat.ogg"
+        ];
+
+        // Standard Audio file extension checks
+        const AUDIO_EXTENSIONS = ['.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac'];
+
+        // Clouds Stream Demo List (Fallback in case local tracks aren't populated yet)
+        const CLOUD_FALLBACK_TRACKS = [
+            {
+                title: "Solitary Neon Ambient",
+                artist: "Aura Creative Studios",
+                url: "https://actions.google.com/sounds/v1/ambiences/ambient_hum_air_conditioner.ogg",
+                duration: "1:24",
+                source: "Cloud Stream"
+            },
+            {
+                title: "Cyberpunk Corridor Ambient",
+                artist: "Lofi Synthesis Co.",
+                url: "https://actions.google.com/sounds/v1/ambiences/outdoor_market_setting.ogg",
+                duration: "2:02",
+                source: "Cloud Stream"
+            },
+            {
+                title: "Dreamy Evening Hum",
+                artist: "Synthesizer Group Beta",
+                url: "https://actions.google.com/sounds/v1/science_fiction/scifi_mechanical_hum.ogg",
+                duration: "1:05",
+                source: "Cloud Stream"
+            }
+        ];
+
+        // Master variables
+        let playlist = [];
+        let favorites = new Set();
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+        let isMuted = false;
+        let preMuteVolume = 0.75;
+        let activeShuffle = false;
+        let activeRepeat = false;
+        let sleepTimerId = null;
+        let sleepTimeRemaining = 0;
+
+        // UI Themes definition
+        const THEMES = {
+            cyberpunk: {
+                primary: 'rgba(168, 85, 247, 0.6)',
+                secondary: 'rgba(6, 182, 212, 0.6)',
+                gradient: 'linear-gradient(135deg, #a855f7, #06b6d4)',
+                bg: 'linear-gradient(135deg, #090514, #02000a, #0d0012)',
+                blobs: ['#a855f7', '#06b6d4', '#d946ef']
+            },
+            liquidgold: {
+                primary: 'rgba(245, 158, 11, 0.6)',
+                secondary: 'rgba(239, 68, 68, 0.6)',
+                gradient: 'linear-gradient(135deg, #f59e0b, #ef4444)',
+                bg: 'linear-gradient(135deg, #180a02, #080200, #1b0c03)',
+                blobs: ['#f59e0b', '#ef4444', '#f97316']
+            },
+            emerald: {
+                primary: 'rgba(16, 185, 129, 0.6)',
+                secondary: 'rgba(6, 182, 212, 0.6)',
+                gradient: 'linear-gradient(135deg, #10b981, #06b6d4)',
+                bg: 'linear-gradient(135deg, #02120b, #000502, #04141a)',
+                blobs: ['#10b981', '#06b6d4', '#14b8a6']
+            },
+            crimson: {
+                primary: 'rgba(244, 63, 94, 0.6)',
+                secondary: 'rgba(236, 72, 153, 0.6)',
+                gradient: 'linear-gradient(135deg, #f43f5e, #ec4899)',
+                bg: 'linear-gradient(135deg, #1c050a, #070002, #1f0416)',
+                blobs: ['#f43f5e', '#ec4899', '#db2777']
+            }
+        };
+
+        // Web Audio API Global Engine States
+        let audioContext;
+        let audioSourceNode;
+        let audioAnalyserNode;
+        let audioPannerNode;
+        let audioBassFilter;
+        let audioTrebleFilter;
+        let visualizerTheme = "bars"; // "bars" | "wave" | "particles"
+        let visualizerAnimationFrame;
+
+        // Cache elements
+        const audioCore = document.getElementById('audio-core');
+        const playBtnSymbol = document.getElementById('play-symbol');
+        const pauseBtnSymbol = document.getElementById('pause-symbol');
+        const playerTitle = document.getElementById('player-title');
+        const playerArtist = document.getElementById('player-artist');
+        const masterScrubber = document.getElementById('master-scrubber');
+        const sliderVolume = document.getElementById('slider-volume');
+        const metaTimeCurrent = document.getElementById('meta-time-current');
+        const metaTimeTotal = document.getElementById('meta-time-total');
+        const vinylDeck = document.getElementById('vinyl-deck');
+        const playlistScroller = document.getElementById('playlist-scroller');
+        const syncStatusPill = document.getElementById('sync-status-pill');
+        const syncStatusText = document.getElementById('sync-status-text');
+        const queueStatusText = document.getElementById('queue-status-text');
+        const queueSearchInput = document.getElementById('queue-search');
+        const canvasScreen = document.getElementById('visualizer-screen');
+
+        window.onload = function() {
+            initApp();
+        };
+
+        // Complete application initializer
+        async function initApp() {
+            // Setup canvas screen bounds
+            resizeVisualizerCanvas();
+            window.addEventListener('resize', resizeVisualizerCanvas);
+
+            // Bind native UI controls
+            bindControls();
+
+            // Try to scan directories automatically from server
+            await autoScanTracksFolder();
+        }
+
+        /**
+         * Dynamic Server-Side Folder Synchronization Engine
+         * Scanning relative directories using non-blocking fetch patterns
+         */
+        async function autoScanTracksFolder() {
+            updateStatusPill("scanning", "SCANNING 'Track/' DIRECTORY");
+            queueStatusText.innerText = "Attempting background folder scan...";
+
+            let detectedTracks = [];
+
+            try {
+                // Method 1: Try reading a tracks.json descriptor if created in the Track folder
+                const descriptorResponse = await fetch('Track/tracks.json');
+                if (descriptorResponse.ok) {
+                    const parsedList = await descriptorResponse.json();
+                    if (Array.isArray(parsedList) && parsedList.length > 0) {
+                        detectedTracks = parsedList.map(track => {
+                            const fileName = typeof track === "string" ? track : track.filename;
+                            return createTrackObject(fileName, "Auto-scanned descriptor");
+                        });
+                    }
+                }
+            } catch (e) {
+                console.log("No descriptor file found. Moving to directory scraper...");
+            }
+
+            if (detectedTracks.length === 0) {
+                try {
+                    // Method 2: Attempting dynamic scraping of server directory listing (useful on local servers or auto-indexing servers)
+                    const directoryResponse = await fetch('Track/');
+                    if (directoryResponse.ok) {
+                        const htmlContent = await directoryResponse.text();
+                        const domParser = new DOMParser();
+                        const parsedDocument = domParser.parseFromString(htmlContent, 'text/html');
+                        const hyperLinks = Array.from(parsedDocument.querySelectorAll('a'));
+                        
+                        hyperLinks.forEach(link => {
+                            const destinationUrl = link.getAttribute('href');
+                            if (destinationUrl) {
+                                const decodedUrl = decodeURIComponent(destinationUrl);
+                                const isAudioFile = AUDIO_EXTENSIONS.some(ext => decodedUrl.toLowerCase().endsWith(ext));
+                                if (isAudioFile && !decodedUrl.startsWith('/') && !decodedUrl.startsWith('http')) {
+                                    detectedTracks.push(createTrackObject(decodedUrl, "Auto-scanned server"));
+                                }
+                            }
+                        });
+                    }
+                } catch (err) {
+                    console.log("Server index scanning restricted by local settings or CORS. Utilizing fallback configuration configuration.");
+                }
+            }
+
+            // Method 3: Fallback configuration list configured by developer
+            if (detectedTracks.length === 0 && CONFIG_TRACKS.length > 0) {
+                CONFIG_TRACKS.forEach(trackName => {
+                    detectedTracks.push(createTrackObject(trackName, "Preconfigured track"));
+                });
+            }
+
+            // Fallback load if absolutely empty
+            if (detectedTracks.length === 0) {
+                playlist = [...CLOUD_FALLBACK_TRACKS];
+                updateStatusPill("fallback", "DEMO CLOUD MODE ACTIVE");
+                queueStatusText.innerText = "Demo tracks loaded. Click Sync to upload local tracks.";
+                showToast("Connected to Cloud", "Using high fidelity default stream directory.");
+            } else {
+                playlist = detectedTracks;
+                updateStatusPill("synced", "DIRECTORY SYNCED ALIVE");
+                queueStatusText.innerText = `Auto-scanned ${playlist.length} track files from ./Track folder`;
+                showToast("Synchronization Alive", `Successfully scanned and loaded ${playlist.length} audio files!`);
+            }
+
+            // Load first track index
+            currentTrackIndex = 0;
+            loadTrack(0);
+            renderPlaylistUI();
+        }
+
+        // Help map filenames to clear metadata labels
+        function createTrackObject(filePath, sourceTag) {
+            const fileName = filePath.split('/').pop();
+            const cleanName = fileName.substring(0, fileName.lastIndexOf('.'));
+            let title = cleanName;
+            let artist = "Local Folder Track";
+            
+            if (cleanName.includes('-')) {
+                const parts = cleanName.split('-');
+                artist = parts[0].trim();
+                title = parts.slice(1).join('-').trim();
+            }
+
+            return {
+                title: title,
+                artist: artist,
+                url: filePath.startsWith('Track/') ? filePath : `Track/${filePath}`,
+                duration: "Syncing...",
+                source: sourceTag
+            };
+        }
+
+        // Manual upload folder select triggers
+        function triggerFolderSelector() {
+            document.getElementById('folderSelectorInput').click();
+        }
+
+        function handleManualFolderSelect(event) {
+            const selectedFiles = event.target.files;
+            if (!selectedFiles || selectedFiles.length === 0) return;
+
+            const tempPlaylist = [];
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const file = selectedFiles[i];
+                const lowercaseName = file.name.toLowerCase();
+                const matchedExt = AUDIO_EXTENSIONS.some(ext => lowercaseName.endsWith(ext));
+                
+                if (matchedExt) {
+                    const objectUrl = URL.createObjectURL(file);
+                    const cleanName = file.name.substring(0, file.name.lastIndexOf('.'));
+                    let title = cleanName;
+                    let artist = "Manually Synchronized";
+                    
+                    if (cleanName.includes('-')) {
+                        const parts = cleanName.split('-');
+                        artist = parts[0].trim();
+                        title = parts.slice(1).join('-').trim();
+                    }
+
+                    tempPlaylist.push({
+                        title: title,
+                        artist: artist,
+                        url: objectUrl,
+                        duration: "Loaded",
+                        source: "Manual Upload"
+                    });
+                }
+            }
+
+            if (tempPlaylist.length > 0) {
+                playlist = tempPlaylist;
+                currentTrackIndex = 0;
+                updateStatusPill("synced", "MANUAL FOLDER LOADED");
+                queueStatusText.innerText = `Uploaded ${playlist.length} track files manually.`;
+                showToast("Folder Synchronized", `Loaded ${playlist.length} tracks into local memory.`);
+                loadTrack(0);
+                renderPlaylistUI();
+                playCurrentTrack();
+            } else {
+                showToast("Invalid Directory", "No compatible audio tracks found in selected folder.", true);
+            }
+        }
+
+        // Web Audio Processing Setup (Filter Chains & Analysers)
+        function initWebAudioAPI() {
+            if (audioContext) return;
+
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Analyser Node
+                audioAnalyserNode = audioContext.createAnalyser();
+                audioAnalyserNode.fftSize = 256;
+
+                // Create filters for real-time acoustic adjustments (DSP)
+                audioBassFilter = audioContext.createBiquadFilter();
+                audioBassFilter.type = "lowshelf";
+                audioBassFilter.frequency.value = 150;
+
+                audioTrebleFilter = audioContext.createBiquadFilter();
+                audioTrebleFilter.type = "highshelf";
+                audioTrebleFilter.frequency.value = 4000;
+
+                // Stereo Panner
+                audioPannerNode = audioContext.createStereoPanner();
+
+                // Setup routing
+                audioSourceNode = audioContext.createMediaElementSource(audioCore);
+                
+                audioSourceNode.connect(audioBassFilter);
+                audioBassFilter.connect(audioTrebleFilter);
+                audioTrebleFilter.connect(audioPannerNode);
+                audioPannerNode.connect(audioAnalyserNode);
+                audioAnalyserNode.connect(audioContext.destination);
+
+                // Start Visualizer Loop
+                runVisualizerLoop();
+            } catch (err) {
+                console.error("Web Audio API not supported on this browser context.", err);
+            }
+        }
+
+        // Audio System Core Events
+        function bindControls() {
+            // Timeline progress bar
+            audioCore.addEventListener('timeupdate', () => {
+                if (audioCore.duration) {
+                    masterScrubber.value = audioCore.currentTime;
+                    metaTimeCurrent.innerText = formatDuration(audioCore.currentTime);
+                }
+            });
+
+            // Track metadata resolver
+            audioCore.addEventListener('loadedmetadata', () => {
+                masterScrubber.max = audioCore.duration;
+                metaTimeTotal.innerText = formatDuration(audioCore.duration);
+                playlist[currentTrackIndex].duration = formatDuration(audioCore.duration);
+                const trackDurationSpan = document.getElementById(`duration-item-${currentTrackIndex}`);
+                if (trackDurationSpan) {
+                    trackDurationSpan.innerText = formatDuration(audioCore.duration);
+                }
+            });
+
+            // Song finish handling
+            audioCore.addEventListener('ended', () => {
+                if (activeRepeat) {
+                    audioCore.currentTime = 0;
+                    playCurrentTrack();
+                } else {
+                    playNext();
+                }
+            });
+
+            // Scrubbing control input
+            masterScrubber.addEventListener('input', (e) => {
+                audioCore.currentTime = e.target.value;
+            });
+
+            // Volume configuration
+            sliderVolume.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                audioCore.volume = val;
+                if (val === 0) {
+                    isMuted = true;
+                } else {
+                    isMuted = false;
+                    preMuteVolume = val;
+                }
+                updateVolumeUI();
+            });
+
+            // Balance panning interaction
+            document.getElementById('balance-slider').addEventListener('input', (e) => {
+                if (audioPannerNode) {
+                    audioPannerNode.pan.value = parseFloat(e.target.value);
+                }
+            });
+
+            // Setup 3D rotating vinyl tilt interactions
+            const boundaryContainer = document.querySelector('.vinyl-container');
+            boundaryContainer.addEventListener('mousemove', (e) => {
+                const rect = boundaryContainer.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left - (rect.width / 2);
+                const mouseY = e.clientY - rect.top - (rect.height / 2);
+                
+                // Angle limits
+                const rotationX = -(mouseY / (rect.height / 2)) * 18;
+                const rotationY = (mouseX / (rect.width / 2)) * 18;
+                
+                vinylDeck.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) scale3d(1.05, 1.05, 1.05)`;
+            });
+
+            boundaryContainer.addEventListener('mouseleave', () => {
+                vinylDeck.style.transform = `rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            });
+        }
+
+        // Player Actions
+        function loadTrack(index) {
+            if (index < 0 || index >= playlist.length) return;
+
+            currentTrackIndex = index;
+            const currentTrack = playlist[currentTrackIndex];
+
+            audioCore.src = currentTrack.url;
+            audioCore.load();
+
+            // Populate text elements
+            playerTitle.innerText = currentTrack.title;
+            playerArtist.innerText = currentTrack.artist;
+
+            // Custom dynamic backdrop ambient glow based on track hash
+            updateAmbientGlowColor(index);
+
+            // Sync favorite UI indicators
+            const heartIcon = document.getElementById('favorite-heart-icon');
+            if (favorites.has(currentTrack.title)) {
+                heartIcon.setAttribute('fill', 'currentColor');
+                heartIcon.classList.add('text-rose-500');
+                heartIcon.classList.remove('text-slate-400');
+            } else {
+                heartIcon.setAttribute('fill', 'none');
+                heartIcon.classList.remove('text-rose-500');
+                heartIcon.classList.add('text-slate-400');
+            }
+
+            masterScrubber.value = 0;
+            metaTimeCurrent.innerText = "0:00";
+            metaTimeTotal.innerText = currentTrack.duration;
+
+            highlightActiveTrackUI();
+        }
+
+        function playCurrentTrack() {
+            initWebAudioAPI();
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
+            isPlaying = true;
+            audioCore.play().then(() => {
+                vinylDeck.classList.add('vinyl-spin');
+                vinylDeck.classList.remove('vinyl-paused');
+            }).catch(e => {
+                console.log("Audio start was deferred until next user click interaction.", e);
+                isPlaying = false;
+                vinylDeck.classList.add('vinyl-paused');
+            });
+
+            playBtnSymbol.classList.add('hidden');
+            pauseBtnSymbol.classList.remove('hidden');
+        }
+
+        function pauseCurrentTrack() {
+            isPlaying = false;
+            audioCore.pause();
+            
+            vinylDeck.classList.add('vinyl-paused');
+            playBtnSymbol.classList.remove('hidden');
+            pauseBtnSymbol.classList.add('hidden');
+        }
+
+        function togglePlayPause() {
+            if (isPlaying) {
+                pauseCurrentTrack();
+            } else {
+                playCurrentTrack();
+            }
+        }
+
+        function playNext() {
+            if (activeShuffle) {
+                const randomIndex = Math.floor(Math.random() * playlist.length);
+                loadTrack(randomIndex);
+            } else {
+                let nextIdx = currentTrackIndex + 1;
+                if (nextIdx >= playlist.length) nextIdx = 0;
+                loadTrack(nextIdx);
+            }
+            playCurrentTrack();
+        }
+
+        function playPrevious() {
+            let prevIdx = currentTrackIndex - 1;
+            if (prevIdx < 0) prevIdx = playlist.length - 1;
+            loadTrack(prevIdx);
+            playCurrentTrack();
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            if (isMuted) {
+                audioCore.volume = 0;
+                sliderVolume.value = 0;
+            } else {
+                audioCore.volume = preMuteVolume;
+                sliderVolume.value = preMuteVolume;
+            }
+            updateVolumeUI();
+        }
+
+        function updateVolumeUI() {
+            const svgVolume = document.getElementById('svg-volume');
+            if (isMuted || audioCore.volume === 0) {
+                svgVolume.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>`;
+            } else if (audioCore.volume < 0.45) {
+                svgVolume.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>`;
+            } else {
+                svgVolume.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>`;
+            }
+        }
+
+        function toggleShuffle() {
+            activeShuffle = !activeShuffle;
+            const btn = document.getElementById('btn-shuffle-toggle');
+            btn.classList.toggle('text-cyan-400', activeShuffle);
+            btn.classList.toggle('text-slate-400', !activeShuffle);
+            showToast("Shuffle Mode", activeShuffle ? "Songs will shuffle." : "Default order restored.");
+        }
+
+        function toggleRepeat() {
+            activeRepeat = !activeRepeat;
+            const btn = document.getElementById('btn-repeat-toggle');
+            btn.classList.toggle('text-purple-400', activeRepeat);
+            btn.classList.toggle('text-slate-400', !activeRepeat);
+            showToast("Loop Mode", activeRepeat ? "Looping current track." : "Default loop disabled.");
+        }
+
+        // DSP Filter Controls
+        function setEqPreset(presetName, targetBtn) {
+            initWebAudioAPI();
+            if (!audioContext) return;
+
+            // Update UI buttons highlights
+            document.querySelectorAll('.eq-btn').forEach(btn => {
+                btn.className = "eq-btn px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-slate-300 border border-white/5 transition-all font-medium";
+            });
+            targetBtn.className = "eq-btn px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-xs text-white border border-white/15 transition-all font-medium glass-card-active";
+
+            switch (presetName) {
+                case "flat":
+                    audioBassFilter.gain.value = 0;
+                    audioTrebleFilter.gain.value = 0;
+                    showToast("Flat Response", "DSP Audio Filters set to flat standard.");
+                    break;
+                case "bassboost":
+                    audioBassFilter.gain.value = 12;
+                    audioTrebleFilter.gain.value = -2;
+                    showToast("Bass Boost Active", "Amplifying ultra low-end frequencies.");
+                    break;
+                case "electronic":
+                    audioBassFilter.gain.value = 7;
+                    audioTrebleFilter.gain.value = 6;
+                    showToast("Electronic Active", "V-shaped dynamic preset engaged.");
+                    break;
+                case "vocals":
+                    audioBassFilter.gain.value = -4;
+                    audioTrebleFilter.gain.value = 8;
+                    showToast("Vocals Enhanced", "Mid-high profile clarity amplified.");
+                    break;
+                case "ambient":
+                    audioBassFilter.gain.value = 5;
+                    audioTrebleFilter.gain.value = 3;
+                    showToast("Ambient Preset", "Deep acoustic resonance configuration.");
+                    break;
+            }
+        }
+
+        // Favorites functionality
+        function toggleFavoriteCurrent() {
+            const currentTrack = playlist[currentTrackIndex];
+            if (favorites.has(currentTrack.title)) {
+                favorites.delete(currentTrack.title);
+                showToast("Unfavorited", "Removed track from your favorites list.");
+            } else {
+                favorites.add(currentTrack.title);
+                showToast("Favorited", "Track saved in memory.");
+            }
+            loadTrack(currentTrackIndex); // Recalculate indicators
+            renderPlaylistUI();
+        }
+
+        function toggleFavoriteIndex(index) {
+            const track = playlist[index];
+            if (favorites.has(track.title)) {
+                favorites.delete(track.title);
+            } else {
+                favorites.add(track.title);
+            }
+            loadTrack(currentTrackIndex);
+            renderPlaylistUI();
+        }
+
+        // Playlist UI compiler
+        function renderPlaylistUI() {
+            playlistScroller.innerHTML = '';
+
+            playlist.forEach((track, idx) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = `track-item glass-card p-3 rounded-2xl flex items-center justify-between cursor-pointer group transition-all duration-300`;
+                wrapper.id = `track-item-card-${idx}`;
+                wrapper.dataset.title = track.title;
+                wrapper.dataset.artist = track.artist;
+                wrapper.onclick = (e) => {
+                    // Stop event bubble if heart is clicked
+                    if (e.target.closest('.heart-btn')) return;
+                    loadTrack(idx);
+                    playCurrentTrack();
+                };
+
+                const isFav = favorites.has(track.title);
+
+                wrapper.innerHTML = `
+                    <div class="flex items-center space-x-3.5 flex-grow truncate">
+                        <div class="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-xs font-mono text-slate-400 group-hover:bg-purple-600/20 group-hover:text-purple-300 transition-all flex-shrink-0">
+                            ${idx + 1}
+                        </div>
+                        <div class="truncate">
+                            <p class="text-xs font-bold text-slate-200 truncate group-hover:text-purple-300 transition-colors">${track.title}</p>
+                            <p class="text-[10px] text-slate-500 font-semibold truncate uppercase tracking-wider">${track.artist}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 flex-shrink-0">
+                        <button class="heart-btn text-slate-600 hover:text-rose-500 transition-colors p-1" onclick="toggleFavoriteIndex(${idx})">
+                            <svg class="w-4 h-4" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24" class="${isFav ? 'text-rose-500' : ''}">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </button>
+                        <span id="duration-item-${idx}" class="font-mono text-[10px] text-slate-500">${track.duration}</span>
+                        <!-- Play state node -->
+                        <div class="playing-state-bars hidden items-end gap-0.5 justify-center h-3.5 w-3.5 flex-shrink-0">
+                            <span class="w-0.5 h-2 bg-cyan-400 rounded-full animate-bounce" style="animation-duration: 0.6s;"></span>
+                            <span class="w-0.5 h-3.5 bg-cyan-400 rounded-full animate-bounce" style="animation-duration: 0.8s;"></span>
+                            <span class="w-0.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style="animation-duration: 0.5s;"></span>
+                        </div>
+                    </div>
+                `;
+
+                playlistScroller.appendChild(wrapper);
+            });
+
+            highlightActiveTrackUI();
+        }
+
+        function highlightActiveTrackUI() {
+            playlist.forEach((_, idx) => {
+                const element = document.getElementById(`track-item-card-${idx}`);
+                if (!element) return;
+
+                const soundIndicator = element.querySelector('.playing-state-bars');
+                const indexMarker = element.querySelector('.w-8');
+
+                if (idx === currentTrackIndex) {
+                    element.className = "track-item glass-card p-3 rounded-2xl flex items-center justify-between cursor-pointer transition-all duration-300 glass-card-active";
+                    if (soundIndicator) soundIndicator.classList.remove('hidden');
+                    if (indexMarker) indexMarker.className = "w-8 h-8 rounded-xl bg-cyan-500/10 flex items-center justify-center text-xs font-mono font-bold text-cyan-400 flex-shrink-0";
+                } else {
+                    element.className = "track-item glass-card p-3 rounded-2xl flex items-center justify-between cursor-pointer group transition-all duration-300";
+                    if (soundIndicator) soundIndicator.classList.add('hidden');
+                    if (indexMarker) indexMarker.className = "w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-xs font-mono text-slate-400 group-hover:bg-purple-600/20 group-hover:text-purple-300 transition-all flex-shrink-0";
+                }
+            });
+        }
+
+        // Live Equalizer Visualizer Screen loop
+        function resizeVisualizerCanvas() {
+            canvasScreen.width = canvasScreen.parentElement.clientWidth;
+            canvasScreen.height = 120;
+        }
+
+        function cycleVisualizerTheme() {
+            if (visualizerTheme === "bars") {
+                visualizerTheme = "wave";
+                document.getElementById('visualizer-theme-indicator').innerText = "DYNAMIC OSCILLOSCOPE ACTIVE";
+            } else if (visualizerTheme === "wave") {
+                visualizerTheme = "particles";
+                document.getElementById('visualizer-theme-indicator').innerText = "ASTRO DUST ATMOSPHERE";
+            } else {
+                visualizerTheme = "bars";
+                document.getElementById('visualizer-theme-indicator').innerText = "NEON SPECTRUM ACTIVE";
+            }
+            showToast("Visualizer Mode Chg", `Switched layout template to ${visualizerTheme.toUpperCase()}`);
+        }
+
+        function runVisualizerLoop() {
+            const ctx = canvasScreen.getContext('2d');
+            const dataBufferLength = audioAnalyserNode.frequencyBinCount;
+            const dataFrequencyArray = new Uint8Array(dataBufferLength);
+
+            let particles = [];
+            // Create static particle database once
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: Math.random() * canvasScreen.width,
+                    y: Math.random() * canvasScreen.height,
+                    size: Math.random() * 2 + 0.5,
+                    speed: Math.random() * 0.4 + 0.1
+                });
+            }
+
+            function drawFrame() {
+                visualizerAnimationFrame = requestAnimationFrame(drawFrame);
+
+                audioAnalyserNode.getByteFrequencyData(dataFrequencyArray);
+
+                // Responsive Canvas Clears
+                ctx.fillStyle = 'rgba(8, 4, 18, 0.45)';
+                ctx.fillRect(0, 0, canvasScreen.width, canvasScreen.height);
+
+                // Fetch current theme values
+                const currentThemeColors = getComputedStyle(document.body);
+                const colorPrimary = currentThemeColors.getPropertyValue('--glow-color-primary').trim() || '#a855f7';
+                const colorSecondary = currentThemeColors.getPropertyValue('--glow-color-secondary').trim() || '#06b6d4';
+
+                // Linear neon color bounds
+                const canvasGradient = ctx.createLinearGradient(0, canvasScreen.height, 0, 0);
+                canvasGradient.addColorStop(0, colorPrimary);
+                canvasGradient.addColorStop(1, colorSecondary);
+
+                if (visualizerTheme === "bars") {
+                    // Pill Equalizer bars
+                    const totalBars = 32;
+                    const barWidth = canvasScreen.width / totalBars;
+                    let positionX = 0;
+
+                    for (let i = 0; i < totalBars; i++) {
+                        const freqValue = dataFrequencyArray[i];
+                        const barHeight = (freqValue / 255) * canvasScreen.height * 0.85;
+
+                        ctx.fillStyle = canvasGradient;
+                        ctx.beginPath();
+                        ctx.roundRect(positionX, canvasScreen.height - barHeight, barWidth - 4, barHeight, [4, 4, 0, 0]);
+                        ctx.fill();
+
+                        positionX += barWidth;
+                    }
+                } else if (visualizerTheme === "wave") {
+                    // Oscilloscope Waves
+                    ctx.beginPath();
+                    ctx.lineWidth = 2.5;
+                    ctx.strokeStyle = canvasGradient;
+
+                    const stepSize = canvasScreen.width / dataBufferLength;
+                    let positionX = 0;
+
+                    for (let i = 0; i < dataBufferLength; i++) {
+                        const freqValue = dataFrequencyArray[i];
+                        const normalizedHeight = (freqValue / 255) * canvasScreen.height;
+                        const positionY = (canvasScreen.height / 2) + (normalizedHeight - (canvasScreen.height / 2)) * 0.7;
+
+                        if (i === 0) {
+                            ctx.moveTo(positionX, positionY);
+                        } else {
+                            ctx.lineTo(positionX, positionY);
+                        }
+
+                        positionX += stepSize;
+                    }
+                    ctx.stroke();
+                } else if (visualizerTheme === "particles") {
+                    // Floating dynamic particles
+                    let totalVal = 0;
+                    for (let i = 0; i < dataBufferLength; i++) {
+                        totalVal += dataFrequencyArray[i];
+                    }
+                    const avgVolume = totalVal / dataBufferLength;
+
+                    particles.forEach(p => {
+                        p.y -= p.speed * (1 + avgVolume / 20);
+                        if (p.y < 0) {
+                            p.y = canvasScreen.height;
+                            p.x = Math.random() * canvasScreen.width;
+                        }
+
+                        ctx.fillStyle = canvasGradient;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size * (1 + avgVolume / 50), 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+                }
+            }
+
+            drawFrame();
+        }
+
+        // Custom Visualizer Filter Searches
+        queueSearchInput.addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase();
+            const elements = playlistScroller.querySelectorAll('.track-item');
+            
+            elements.forEach(item => {
+                const matchTitle = item.dataset.title.toLowerCase().includes(val);
+                const matchArtist = item.dataset.artist.toLowerCase().includes(val);
+                if (matchTitle || matchArtist) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        });
+
+        // Theme management systems
+        function applyTheme(themeKey) {
+            const config = THEMES[themeKey];
+            if (!config) return;
+
+            document.documentElement.style.setProperty('--glow-color-primary', config.primary);
+            document.documentElement.style.setProperty('--glow-color-secondary', config.secondary);
+            document.documentElement.style.setProperty('--accent-gradient', config.gradient);
+            document.documentElement.style.setProperty('--bg-gradient', config.bg);
+
+            // Dynamically alter background glowing blobs colors
+            document.getElementById('ambient-blob-1').style.backgroundColor = config.blobs[0];
+            document.getElementById('ambient-blob-2').style.backgroundColor = config.blobs[1];
+            document.getElementById('ambient-blob-3').style.backgroundColor = config.blobs[2];
+
+            showToast("Theme Configured", `Switched player interface colors to ${themeKey.toUpperCase()}`);
+        }
+
+        // Update colors slightly based on current index for premium feel
+        function updateAmbientGlowColor(index) {
+            const multiplier = index * 40;
+            const b1 = document.getElementById('ambient-blob-1');
+            const b2 = document.getElementById('ambient-blob-2');
+            
+            b1.style.transform = `translate(${Math.sin(multiplier) * 15}px, ${Math.cos(multiplier) * 15}px)`;
+            b2.style.transform = `translate(${Math.cos(multiplier) * -15}px, ${Math.sin(multiplier) * -15}px)`;
+        }
+
+        // Sleep Timer Features
+        function toggleTimerMenu() {
+            const menu = document.getElementById('timer-config-menu');
+            const hidden = menu.classList.contains('pointer-events-none');
+            if (hidden) {
+                menu.classList.remove('pointer-events-none', 'opacity-0');
+                menu.classList.remove('translate-y-10');
+            } else {
+                menu.classList.add('pointer-events-none', 'opacity-0');
+                menu.classList.add('translate-y-10');
+            }
+        }
+
+        function setSleepTimer(minutes) {
+            clearSleepTimer();
+            sleepTimeRemaining = minutes * 60;
+            const timerBadge = document.getElementById('timer-badge');
+            
+            timerBadge.classList.remove('hidden');
+            timerBadge.innerText = `${minutes} MINS`;
+
+            sleepTimerId = setInterval(() => {
+                sleepTimeRemaining--;
+                if (sleepTimeRemaining % 60 === 0) {
+                    timerBadge.innerText = `${sleepTimeRemaining / 60} MINS`;
+                }
+
+                if (sleepTimeRemaining <= 0) {
+                    pauseCurrentTrack();
+                    clearSleepTimer();
+                    showToast("Sleep Timer Complete", "Music has been paused automatically.");
+                }
+            }, 1000);
+
+            toggleTimerMenu();
+            showToast("Sleep Timer Enabled", `Aura will pause playing in ${minutes} minutes.`);
+        }
+
+        function clearSleepTimer() {
+            if (sleepTimerId) {
+                clearInterval(sleepTimerId);
+                sleepTimerId = null;
+            }
+            document.getElementById('timer-badge').classList.add('hidden');
+        }
+
+        // Helper Status Pill indicators
+        function updateStatusPill(statusKey, text) {
+            syncStatusPill.className = "flex items-center space-x-2 px-4 py-1.5 rounded-full border";
+            const pingSpan = syncStatusPill.querySelector('.animate-ping');
+            const staticNode = syncStatusPill.querySelector('.relative.inline-flex');
+
+            if (statusKey === "scanning") {
+                syncStatusPill.classList.add('bg-amber-500/10', 'border-amber-500/30');
+                syncStatusText.className = "text-xs font-bold text-amber-400 uppercase tracking-wider";
+                pingSpan.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75";
+                staticNode.className = "relative inline-flex rounded-full h-2 w-2 bg-amber-500";
+            } else if (statusKey === "synced") {
+                syncStatusPill.classList.add('bg-emerald-500/10', 'border-emerald-500/30');
+                syncStatusText.className = "text-xs font-bold text-emerald-400 uppercase tracking-wider";
+                pingSpan.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
+                staticNode.className = "relative inline-flex rounded-full h-2 w-2 bg-emerald-500";
+            } else {
+                syncStatusPill.classList.add('bg-cyan-500/10', 'border-cyan-500/30');
+                syncStatusText.className = "text-xs font-bold text-cyan-400 uppercase tracking-wider";
+                pingSpan.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75";
+                staticNode.className = "relative inline-flex rounded-full h-2 w-2 bg-cyan-500";
+            }
+            syncStatusText.innerText = text;
+        }
+
+        // Helper time conversion
+        function formatDuration(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Help Modal toggle
+        function toggleHelpModal() {
+            const modal = document.getElementById('system-help-modal');
+            const active = modal.classList.contains('pointer-events-none');
+            if (active) {
+                modal.classList.remove('pointer-events-none', 'opacity-0');
+            } else {
+                modal.classList.add('pointer-events-none', 'opacity-0');
+            }
+        }
+
+        // Status Toasts
+        function showToast(title, desc, isError = false) {
+            const toast = document.getElementById('status-toast');
+            const toastTitle = document.getElementById('toast-title-text');
+            const toastDesc = document.getElementById('toast-desc-text');
+
+            toastTitle.innerText = title;
+            toastDesc.innerText = desc;
+
+            if (isError) {
+                toastTitle.className = "text-xs font-black uppercase tracking-wider text-red-400";
+            } else {
+                toastTitle.className = "text-xs font-black uppercase tracking-wider text-purple-300";
+            }
+
+            toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 4500);
+        }
+    </script>
+</body>
+</html>
